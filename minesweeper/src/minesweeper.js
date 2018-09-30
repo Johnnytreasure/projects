@@ -28,6 +28,19 @@ const generateBombBoard = (numberOfRows, numberOfColumns, numberOfBombs) => {
     var randomColumnIndex = Math.floor(Math.random() * numberOfColumns);
     board[randomRowIndex][randomColumnIndex] = 'B';
     numberOfBombsPlaced++;
+    // this could still place bombs on top of other bombs
   }
   return board;
 }
+
+const printBoard = (board) => {
+  console.log(board.map(row => row.join(' | ')).join('\n'));
+}
+
+const playerBoard = generatePlayerBoard(3,4)
+const bombBoard = generateBombBoard(3,4,5)
+
+console.log('Player board: ');
+printBoard(playerBoard);
+console.log('Bomb board: ');
+printBoard(bombBoard);
