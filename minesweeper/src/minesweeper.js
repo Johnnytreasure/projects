@@ -10,4 +10,24 @@ const generatePlayerBoard = (numberOfRows, numberOfColumns) => {
   return board;
 }
 
-console.log(generatePlayerBoard(2, 2));
+// console.log(generatePlayerBoard(2, 2));
+
+const generateBombBoard = (numberOfRows, numberOfColumns, numberOfBombs) => {
+  let board = [];
+  for(let rows = 0; rows < numberOfRows; rows++){
+      let row = [];
+      for(let columns = 0; columns < numberOfColumns; columns++){
+          row.push(null);
+      }
+        board.push(row);
+  }
+  var numberOfBombsPlaced = 0;
+  while (numberOfBombsPlaced < numberOfBombs) {
+
+    var randomRowIndex = Math.floor(Math.random() * numberOfRows);
+    var randomColumnIndex = Math.floor(Math.random() * numberOfColumns);
+    board[randomRowIndex][randomColumnIndex] = 'B';
+    numberOfBombsPlaced++;
+  }
+  return board;
+}
