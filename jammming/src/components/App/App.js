@@ -13,7 +13,28 @@ class App extends React.Component {
           artist: 'Elton John',
           album: 'Madman across the water',
           id: 111
-        }]
+        }],
+      playlistName: ['Namey name'],
+      playlistTracks: [{
+        name: 'Tiny Dancer',
+        artist: 'Elton John',
+        album: 'Madman across the water',
+        id: 111
+      }],
+    }
+    this.addTrack=this.addTrack.bind(this);
+    this.removeTrack=this.removeTrack.bind(this);
+  }
+
+  addTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
+      return;
+    }
+  }
+
+  removeTrack(track) {
+    if (this.state.playlistTracks.find(savedTrack => savedTrack.id !== track.id)) {
+      return;
     }
   }
 
@@ -24,8 +45,8 @@ class App extends React.Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults}/>
-            <Playlist />
+            <SearchResults searchResults={this.state.searchResults} onAdd= {this.addTrack}/>
+            <Playlist playlistName ={this.state.playlistName} playlistTracks={this.state.playlistTracks} onRemove= {this.removeTrack}/>
           </div>
         </div>
       </div>
