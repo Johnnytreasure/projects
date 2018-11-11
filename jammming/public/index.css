@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+}
+html,
+#root {
+  height: 100%;
+}
+
+html {
+  font-size: 18px;
+}
