@@ -1,12 +1,12 @@
 const clientId = 'af18c3ae47974b9fb04fc642ca7a86f9';
-const redirectUri = 'http://localhost:3000/';
+const redirectUri = 'http://JohnnyJammming.surge.sh';
 let accessToken;
 
 const Spotify = {
   getAccessToken() {
     if (accessToken) {
       return accessToken;
-    } else if (!accessToken) {
+    }
       const urlToken = window.location.href.match(/access_token=([^&]*)/);
       const expirationTime = window.location.href.match(/expires_in=([^&]*)/);
       if (urlToken && expirationTime) {
@@ -19,11 +19,10 @@ const Spotify = {
         const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`
         window.location = accessUrl;
       }
-    }
   },
 
   search(term) {
-    const accessToken= Spotify.getAccessToken();
+    let accessToken= Spotify.getAccessToken();
     return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
       headers:  {
         Authorization: `Bearer ${accessToken}`
@@ -53,19 +52,13 @@ const Spotify = {
    const headers = {
      Authorization: `Bearer ${accessToken}`
    };
-   if (!playlistName || !trackURIs) {
-     return fetch(`https://api.spotify.com/v1/me`, {
+   if (!playlistName || !trackURIs)return;
+   fetch(`https://api.spotify.com/v1/me`, {
      headers: headers
-   }).then(response => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.log('failed to get userId');
-      }
-    }).then(jsonResponse => {
-      if (jsonResponse.id) {
-       userId = jsonResponse.id;
-     }
+   })
+   .then(response => response.json())
+  .then(jsonResponse => userId = jsonResponse.id)
+   .then(() => {
      return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,
        {
          method: 'POST',
@@ -74,17 +67,10 @@ const Spotify = {
            name: playlistName
         }
      )}
-   ).then(response => {
-    if (response.ok) {
-        return response.json();
-    } else {
-      console.log('failed to create new playlist');
-    }
-    }).then(jsonResponse => {
-      if (jsonResponse.id) {
-      playlistId = jsonResponse.id;
-    }
-    }).then(() => {
+   )})
+   .then(response => response.json())
+    .then(jsonResponse => playlistId = jsonResponse.id)
+    .then(() => {
       return fetch(`https://api.spotify.com/v1/users/${userId}/playlists/${playlistId}/tracks`,
         {
           method: 'POST',
@@ -94,9 +80,7 @@ const Spotify = {
           })
         });
       });
-    });
     }
-  }
-};
+  };
 
 export default Spotify;
