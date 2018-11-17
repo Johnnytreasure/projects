@@ -27,23 +27,14 @@ class App extends React.Component {
   }
 
   addTrack(track) {
-    let alreadyExist=false;
     if (this.state.playlistTracks.find(playlistTrack => {
       if (playlistTrack.id === track.id) {
-      let alreadyExist=true;
       return;
       }
     }));
-    if (!alreadyExist) {
       const newPlaylistTracks = this.state.playlistTracks;
       this.state.playlistTracks.push(track);
        this.setState({playlistTracks: newPlaylistTracks});
-       const newfilteredResults= this.state.searchResults.filter(searchResult => {
-        const filteredPlaylist = this.state.playlistTracks.filter(track => track.id === searchResult.id);
-         return (filteredPlaylist.length == 0)
-       });
-       this.setState({filteredPlaylist: newfilteredResults});
-    }
   }
 
   removeTrack(track) {
@@ -53,11 +44,6 @@ class App extends React.Component {
       newPlaylistTracks.splice(pos, 1);
     }
     this.setState({playlistTracks: newPlaylistTracks});
-    let newfilteredResults = this.state.searchResults.filter(searchResult =>{
-      let x = this.state.playlistTracks.filter(track => track.id === searchResult.id);
-      return (x.length == 0)
-    });
-    this.setState({filteredResults: newfilteredResults});
   }
 
   updatePlaylistName(name) {
@@ -67,9 +53,10 @@ class App extends React.Component {
   savePlaylist() {
     const trackUris = this.state.playlistTracks.map(playlistTrack => playlistTrack.uri);
     Spotify.savePlaylist(this.state.playlistName, trackUris);
-    this.setState({playlistTracks: [], PlaylistName: 'New Playlist'});
-    let newfilteredResults = this.state.searchResults;
-    this.setState({filteredResults: newfilteredResults});
+    this.setState({
+      playlistTracks: []
+    });
+    this.updatePlaylistName('New Playlist');
   }
 
   render() {
